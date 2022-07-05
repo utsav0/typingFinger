@@ -15,19 +15,25 @@
         .form-control-lg{
             width: 50%;
         }
-        .warningTxt{
+        #loginMsg{
             color: red;
             text-decoration: none;
         }
         a{
             text-decoration: none;
         }
+        #loginMsgColor{
+          display: none;
+        }
       </style>
 
 </head>
 <body>
     <div class="container">
-    <form class = 'form-control-lg' method="post" action="/login"> {% csrf_token %}
+      <div id="loginMsg">{{message}}</div>
+      <span id="loginMsgColor">{{msgColor}}</span>
+      <br>
+    <form class = 'form-control-lg' method="post" action="/practice"> {% csrf_token %}
         <div class="mb-3">
           <label for="exampleInputEmail1" class="form-label">Email address</label>
           <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name = "email">
@@ -40,7 +46,22 @@
         <button type="submit" class="btn btn-primary">Submit</button>
         <span class="forgotpwd"><a href="/forgotpwd">Forgot Password?</a></span>
       </form>
-      <div class="warningTxt">{{warning}}</div>
     </div>
+
+    <script>
+      const msgColor = document.getElementById("loginMsgColor").innerHTML
+
+      const msg = document.getElementById("loginMsg")
+      
+      if (msgColor == "green"){
+        msg.style.color = "green";
+      }
+      else if(msgColor =="blue"){
+        msg.style.color = "blue"
+      }
+      else{
+        msg.style.color = "red;"
+      }
+    </script>
 </body>
 </html>
