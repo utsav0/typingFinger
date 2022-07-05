@@ -12,27 +12,34 @@ def home(request):
 def signup(request):
     return render(request , "signup.html")
 
+def checkCredentials(email, pwd):
+    # logic to match the credentials
+    return True
+
 def practice(request):
-    return render(request, "practice.html")
+
+    # first verifying weather the user is logined or not
+    email = request.POST.get("email", None)
+    pwd = request.POST.get("pwd", None)
+
+    if email == None or pwd == None:
+        # redirecting to logn first
+        return render(request, "login.html", {"message":"Please login first to use the service:", "msgColor":"blue"})
+
+    elif email != None and pwd != None:
+        status = checkCredentials(email, pwd)
+        if status == True:
+            return render(request, "practice.html")
+        elif status == False:
+            return render(request, "login.html", {"message":"Credentials did not match!"})
+        else:
+            return HttpResponse("Unknown Error!")
 
 def forgotpwd(request):
     return render(request, "forgotpwd.html")
 
-def checkCredentials(email, pwd):
-    return True
-
 def login(request):
-    email = request.POST.get("email", None)
-    pwd = request.POST.get("pwd", None)
-
-    if email != None and pwd != None:
-        status = checkCredentials(email, pwd)
-        if status == True:
-            return redirect("/practice", {1:"one"})
-        elif status == False:
-            return render(request, "login.html", {"message":"Credentials did not match!"})
-    else:
-        return render(request, "login.html", {"message":""})
+    return render(request, "login.html", {"message":""})
 
 def addNewUser(request):
     email = request.POST.get("email", None)
@@ -43,6 +50,8 @@ def addNewUser(request):
     else:
         return HttpResponse("Ran Into Unknown Error!")
     
+def result(request):
+    return HttpResponse("result page")
 
 
 

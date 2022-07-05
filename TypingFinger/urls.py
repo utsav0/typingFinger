@@ -25,5 +25,6 @@ urlpatterns = [
     path("practice", views.practice, name = "practice"),
     path("forgotpwd", views.forgotpwd, name = "forgotpwd"),
     path("checkcredentials", views.checkCredentials, name = "check credentials"),
-    path("new-user-login", views.addNewUser, name = "add new user")
+    path("new-user-login", views.addNewUser, name = "add new user"),
+    path("result", views.result, name = "result page")
 ]

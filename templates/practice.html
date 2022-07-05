@@ -1,1 +1,162 @@
-practice {{1}}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>typig finger</title>
+
+    <style>
+      .container {
+        border: 2px solid red;
+        width: 800px;
+        /* height: 70vh; */
+        position: absolute;
+        left: 50vw;
+        top: 50%;
+        transform: translateX(-50%) translateY(-70%);
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+      }
+
+      #timeCont {
+        width: 120px;
+        height: 120px;
+        border: 10px solid blue;
+        border-radius: 50%;
+        margin-top: 20px;
+        text-align: center;
+        line-height: 121px;
+        font-size: 7em;
+      }
+
+      #txtCont {
+        border: 5px inset rgb(101, 42, 0);
+        margin-top: 50px;
+        height: 120px;
+        width: 99%;
+        overflow: hidden;
+        white-space: nowrap;
+        font-size: 33px;
+        line-height: 121px;
+        color: black;
+      }
+
+      #instructionTxt {
+        text-align: center;
+        font-size: x-large;
+      }
+
+      .red {
+        color: red;
+      }
+      .green {
+        color: green;
+      }
+      .currentWord {
+        border: 2px solid greenyellow;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div id="timeCont">6</div>
+      <div id="txtCont">
+        <span id="word0">
+          <span id="char1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        </span>
+      </div>
+    </div>
+    <p id="instructionTxt">Start typing...</p>
+
+    <script>
+      let curChar = 0;
+      let overallChar = 1;
+      let curWord = 0;
+      let removableWord = 0;
+      let currentWord = 1;
+
+      window.addEventListener("keypress", function (event) {
+        let key = event.key;
+
+        
+        console.log(key, ": is pressed and current character is: ",curChar, "and word is : ", practiceTxt[curWord]);
+        
+        if (curChar > (practiceTxt[curWord].length)-1) {
+          spacePressed();
+        }
+
+        if (key == practiceTxt[curWord][curChar]) {
+          console.log("matched");
+          let charId = "char"+overallChar
+          console.log("the is is : ", charId);
+          document.getElementById(charId).classList.add("green")
+          if (key == " ") {
+            spacePressed();
+          }
+          else{
+            console.log("ovc: ", overallChar);
+          }
+        }
+        else{
+          document.getElementById("char"+overallChar).classList.add("red")
+        }
+        curChar += 1;
+        overallChar += 1
+      });
+
+      function spacePressed() {
+        console.log("space function entered");
+        curWord += 1;
+        curChar = -1;
+
+        // remvoving the extra word in left
+        document.getElementById("word" + removableWord).style.display = "none";
+        removableWord += 1;
+
+        // removing the current word class from last word
+        document
+          .getElementById("word" + currentWord)
+          .classList.remove("currentWord");
+
+        // adding the current word class to next word
+        document
+          .getElementById("word" + (1 + currentWord))
+          .classList.add("currentWord");
+        currentWord += 1;
+      }
+
+      let txtCont = document.getElementById("txtCont");
+
+      let practiceTxt = [
+        ["I", "t"," "],
+        ["a", "m", " "],
+        ["u", "t", "s", "a", "v", " "],
+      ];
+      let index = 0;
+      let wordCount = 0;
+      let charCount = 0;
+
+      function addWord(item) {
+        wordCount += 1;
+
+        let wordCont = document.createElement("span");
+        wordCont.setAttribute("id", "word" + wordCount);
+        txtCont.appendChild(wordCont);
+
+        item.forEach(function (char) {
+          addChar(char, wordCont);
+        });
+      }
+      function addChar(char, wordCont) {
+        charCount += 1;
+        let charCont = document.createElement("span");
+        charCont.innerHTML = char;
+        charCont.setAttribute("id", "char" + charCount);
+        wordCont.appendChild(charCont);
+      }
+      practiceTxt.forEach(addWord);
+    </script>
+  </body>
+</html>
