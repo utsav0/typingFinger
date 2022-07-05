@@ -22,5 +22,7 @@ urlpatterns = [
     path("", views.home, name = "Home Page"),
     path("login", views.login, name= "login"),
     path("signup", views.signup, name = "signup"),
-    path("practice", views.practice, name = "practice")
+    path("practice", views.practice, name = "practice"),
+    path("forgotpwd", views.forgotpwd, name = "forgotpwd"),
+    path("checkcredentials", views.checkCredentials, name = "check credentials")
 ]
