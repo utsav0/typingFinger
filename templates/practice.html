@@ -62,10 +62,12 @@
   </head>
   <body>
     <div class="container">
-      <div id="timeCont">6</div>
+      <div id="timeCont">60</div>
       <div id="txtCont">
         <span id="word-1">
-          <span id="char-1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+          <span id="char-1"
+            >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span
+          >
         </span>
       </div>
     </div>
@@ -160,23 +162,41 @@
         overallChar += 1;
       }
 
-      window.addEventListener("keypress", function (event) {
+      let timeCont = document.getElementById("timeCont");
+      let body = document.getElementsByTagName("body")[0];
+      let sec = 60;
+
+      function addELToBody() {
+        body.addEventListener("keydown", firstKeyPress);
+      }
+
+      function firstKeyPress() {
+        startTime();
+        body.removeEventListener("keydown", firstKeyPress);
+      }
+
+      function startTime() {
+        setInterval(() => {
+          sec -= 1;
+          if (sec == 0) {
+            window.location.replace("/login");
+          }
+          // if (sec == 0){clearInterval(setIntervalId)}
+          timeCont.innerHTML = sec.toString();
+        }, 1000);
+      }
+
+      window.addEventListener("keydown", function (event) {
         matchKey(event.key);
       });
 
-
-
-
-
-
-// ,,,,,,-------------------ASYNC AWAIT HAS TO BE ADDED HERE----->>>>
-
-
-
-
-
+      window.onload = addELToBody();
 
       getWords();
+      setTimeout(() => {
+        document.getElementById("word0").classList.add("currentWord");
+      }, 200);
+
       // adding 10 new words after each 2 seconds
       setInterval(() => {
         getWords();

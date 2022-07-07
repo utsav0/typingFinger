@@ -7,7 +7,6 @@ from urllib3 import Retry
 import os, csv, random
 
 def generateTxt(request, wordCount= 10):
-    # return JsonResponse({"itm":"sample txt"})
 
     charList = []
 
@@ -16,7 +15,6 @@ def generateTxt(request, wordCount= 10):
     file_path = os.path.join(module_dir, "words.csv")
 
     with open(file_path, "r") as fh:
-        print("fh opened!")
         fhReader = list(csv.reader(fh))
 
         # chosing wordCount number of random words
@@ -26,7 +24,7 @@ def generateTxt(request, wordCount= 10):
         # splitting the words into characters
         for word in wordList:
             charList.append([char for char in word])
-        print(charList)
+        # print(charList)
 
         # return JsonResponse(["one","two"], safe=False)
         return JsonResponse(charList, safe = False)
