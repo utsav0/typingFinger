@@ -1,10 +1,35 @@
 from ctypes.wintypes import PDWORD
 from distutils.command import check
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from requests import request
 from urllib3 import Retry
+import os, csv, random
 
+def generateTxt(request, wordCount= 10):
+    # return JsonResponse({"itm":"sample txt"})
+
+    charList = []
+
+    # getting the csv fiel path
+    module_dir = os.path.dirname(__file__)
+    file_path = os.path.join(module_dir, "words.csv")
+
+    with open(file_path, "r") as fh:
+        print("fh opened!")
+        fhReader = list(csv.reader(fh))
+
+        # chosing wordCount number of random words
+        wordList = random.choices(list(fhReader[0]), k = wordCount)
+
+
+        # splitting the words into characters
+        for word in wordList:
+            charList.append([char for char in word])
+        print(charList)
+
+        # return JsonResponse(["one","two"], safe=False)
+        return JsonResponse(charList, safe = False)
 
 def home(request):
     return render(request, "index.html")
@@ -29,7 +54,8 @@ def practice(request):
     elif email != None and pwd != None:
         status = checkCredentials(email, pwd)
         if status == True:
-            return render(request, "practice.html")
+            
+            return render(request, "practice.html",{"pythonTxt":generateTxt(request)})
         elif status == False:
             return render(request, "login.html", {"message":"Credentials did not match!"})
         else:

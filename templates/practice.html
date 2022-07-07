@@ -56,6 +56,7 @@
       }
       .currentWord {
         border: 2px solid greenyellow;
+        padding-right: -5px;
       }
     </style>
   </head>
@@ -63,8 +64,8 @@
     <div class="container">
       <div id="timeCont">6</div>
       <div id="txtCont">
-        <span id="word0">
-          <span id="char1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <span id="word-1">
+          <span id="char-1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
         </span>
       </div>
     </div>
@@ -72,42 +73,47 @@
 
     <script>
       let curChar = 0;
-      let overallChar = 1;
+      let overallChar = 0;
       let curWord = 0;
-      let removableWord = 0;
+      let removableWord = -1;
       let currentWord = 1;
+      let wordCount = 0;
+      let charCount = 0;
+      let allWords = [];
 
-      window.addEventListener("keypress", function (event) {
-        let key = event.key;
+      function getWords() {
+        // getting the list of 10 words first time
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "generatetxt", true);
+        xhr.onload = function () {
+          let tempWordList = JSON.parse(this.responseText);
+          tempWordList.forEach(addWord);
+          allWords = allWords.concat(tempWordList);
+        };
+        xhr.send();
+      }
 
-        
-        console.log(key, ": is pressed and current character is: ",curChar, "and word is : ", practiceTxt[curWord]);
-        
-        if (curChar > (practiceTxt[curWord].length)-1) {
-          spacePressed();
-        }
+      function addWord(item) {
+        // creating the span container for each word
+        let wordCont = document.createElement("span");
+        wordCont.setAttribute("id", "word" + wordCount);
+        txtCont.appendChild(wordCont);
 
-        if (key == practiceTxt[curWord][curChar]) {
-          console.log("matched");
-          let charId = "char"+overallChar
-          console.log("the is is : ", charId);
-          document.getElementById(charId).classList.add("green")
-          if (key == " ") {
-            spacePressed();
-          }
-          else{
-            console.log("ovc: ", overallChar);
-          }
-        }
-        else{
-          document.getElementById("char"+overallChar).classList.add("red")
-        }
-        curChar += 1;
-        overallChar += 1
-      });
+        item.forEach(function (char) {
+          addChar(char, wordCont);
+        });
+        wordCount += 1;
+      }
+      function addChar(char, wordCont) {
+        // adding characters in word contianer
+        let charCont = document.createElement("span");
+        charCont.innerHTML = char;
+        charCont.setAttribute("id", "char" + charCount);
+        wordCont.appendChild(charCont);
+        charCount += 1;
+      }
 
-      function spacePressed() {
-        console.log("space function entered");
+      function goToNextWord() {
         curWord += 1;
         curChar = -1;
 
@@ -117,46 +123,64 @@
 
         // removing the current word class from last word
         document
-          .getElementById("word" + currentWord)
+          .getElementById("word" + (currentWord - 1))
           .classList.remove("currentWord");
 
         // adding the current word class to next word
         document
-          .getElementById("word" + (1 + currentWord))
+          .getElementById("word" + currentWord)
           .classList.add("currentWord");
         currentWord += 1;
       }
 
-      let txtCont = document.getElementById("txtCont");
+      function matchKey(key) {
+        // If the word length exceeded and user still typing the word
+        if (curChar > allWords[curWord].length - 1) {
+          goToNextWord();
+        }
 
-      let practiceTxt = [
-        ["I", "t"," "],
-        ["a", "m", " "],
-        ["u", "t", "s", "a", "v", " "],
-      ];
-      let index = 0;
-      let wordCount = 0;
-      let charCount = 0;
+        // when key matches
+        else if (key == allWords[curWord][curChar]) {
+          if (key == " ") {
+            goToNextWord();
+          } //when whitespace pressed
 
-      function addWord(item) {
-        wordCount += 1;
+          // when key matches and is not a whitespace
+          else {
+            let charId = "char" + overallChar;
+            document.getElementById(charId).classList.add("green");
+          }
+        }
 
-        let wordCont = document.createElement("span");
-        wordCont.setAttribute("id", "word" + wordCount);
-        txtCont.appendChild(wordCont);
-
-        item.forEach(function (char) {
-          addChar(char, wordCont);
-        });
+        // when key did not match
+        else {
+          document.getElementById("char" + overallChar).classList.add("red");
+        }
+        curChar += 1;
+        overallChar += 1;
       }
-      function addChar(char, wordCont) {
-        charCount += 1;
-        let charCont = document.createElement("span");
-        charCont.innerHTML = char;
-        charCont.setAttribute("id", "char" + charCount);
-        wordCont.appendChild(charCont);
-      }
-      practiceTxt.forEach(addWord);
+
+      window.addEventListener("keypress", function (event) {
+        matchKey(event.key);
+      });
+
+
+
+
+
+
+// ,,,,,,-------------------ASYNC AWAIT HAS TO BE ADDED HERE----->>>>
+
+
+
+
+
+
+      getWords();
+      // adding 10 new words after each 2 seconds
+      setInterval(() => {
+        getWords();
+      }, 2000);
     </script>
   </body>
 </html>

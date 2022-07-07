@@ -26,5 +26,6 @@ urlpatterns = [
     path("forgotpwd", views.forgotpwd, name = "forgotpwd"),
     path("checkcredentials", views.checkCredentials, name = "check credentials"),
     path("new-user-login", views.addNewUser, name = "add new user"),
-    path("result", views.result, name = "result page")
+    path("result", views.result, name = "result page"),
+    path("generatetxt", views.generateTxt, name ="generate text")
 ]
