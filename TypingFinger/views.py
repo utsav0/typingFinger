@@ -41,23 +41,7 @@ def checkCredentials(email, pwd):
 
 def practice(request):
 
-    # first verifying weather the user is logined or not
-    email = request.POST.get("email", None)
-    pwd = request.POST.get("pwd", None)
-
-    if email == None or pwd == None:
-        # redirecting to logn first
-        return render(request, "login.html", {"message":"Please login first to use the service:", "msgColor":"blue"})
-
-    elif email != None and pwd != None:
-        status = checkCredentials(email, pwd)
-        if status == True:
-            
             return render(request, "practice.html",{"pythonTxt":generateTxt(request)})
-        elif status == False:
-            return render(request, "login.html", {"message":"Credentials did not match!"})
-        else:
-            return HttpResponse("Unknown Error!")
 
 def forgotpwd(request):
     return render(request, "forgotpwd.html")
@@ -79,10 +63,12 @@ def result(request):
     totalChar = request.GET.get("totalChar", None)
     MTWords = request.GET.get("MTWords", None)
     MTChars = request.GET.get("MTChars", None)
+    wordAcc = int(100-(int(MTWords)/int(totalWords)))
+    charAcc = int(100-(int(MTChars)/int(totalChar)))
     if totalWords == None:
         return redirect("/practice")
     else:
-        resultValues = {"totalWords":totalWords, "totalChars":totalChar, "MTWords":MTWords, "MTChars":MTChars}
+        resultValues = {"totalWords":totalWords, "totalChars":totalChar, "MTWords":MTWords, "MTChars":MTChars, "wordAcc":wordAcc, "charAcc":charAcc}
         return render(request, "result.html", resultValues)
 
 
