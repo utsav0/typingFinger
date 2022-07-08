@@ -75,7 +75,15 @@ def addNewUser(request):
         return HttpResponse("Ran Into Unknown Error!")
     
 def result(request):
-    return HttpResponse("result page")
+    totalWords = request.GET.get("totalWords", None)
+    totalChar = request.GET.get("totalChar", None)
+    MTWords = request.GET.get("MTWords", None)
+    MTChars = request.GET.get("MTChars", None)
+    if totalWords == None:
+        return redirect("/practice")
+    else:
+        resultValues = {"totalWords":totalWords, "totalChars":totalChar, "MTWords":MTWords, "MTChars":MTChars}
+        return render(request, "result.html", resultValues)
 
 
 

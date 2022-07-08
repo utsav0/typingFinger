@@ -55,8 +55,9 @@
         color: green;
       }
       .currentWord {
-        border: 2px solid greenyellow;
-        padding-right: -5px;
+        border: 2px solid purple;
+        /* padding-right: -5px; */
+        border-radius: 10px;
       }
     </style>
   </head>
@@ -100,7 +101,6 @@
         let wordCont = document.createElement("span");
         wordCont.setAttribute("id", "word" + wordCount);
         txtCont.appendChild(wordCont);
-
         item.forEach(function (char) {
           addChar(char, wordCont);
         });
@@ -117,7 +117,7 @@
 
       function goToNextWord() {
         curWord += 1;
-        curChar = -1;
+        curChar = 0;
 
         // remvoving the extra word in left
         document.getElementById("word" + removableWord).style.display = "none";
@@ -136,30 +136,72 @@
       }
 
       function matchKey(key) {
-        // If the word length exceeded and user still typing the word
-        if (curChar > allWords[curWord].length - 1) {
-          goToNextWord();
-        }
-
-        // when key matches
-        else if (key == allWords[curWord][curChar]) {
-          if (key == " ") {
+        // if backspace is pressed
+        if (key == "Backspace") {
+        } else {
+          // when word is exceeded
+          if (curChar > allWords[curWord].length - 2) {
             goToNextWord();
-          } //when whitespace pressed
-
-          // when key matches and is not a whitespace
+          }
+          //-2 because -1 as index start with 0 and another -1 as there also contains a whitespace in word list
           else {
-            let charId = "char" + overallChar;
-            document.getElementById(charId).classList.add("green");
+            // when key matches
+            if (key == allWords[curWord][curChar]) {
+              let charId = "char" + overallChar;
+              document.getElementById(charId).classList.add("green");
+            }
+
+            // when key did not match
+            else {
+              document
+                .getElementById("char" + overallChar)
+                .classList.add("red");
+            }
+            curChar += 1;
+          }
+          overallChar += 1;
+        }
+      }
+
+      //   function goToPreviousWord() {
+      //     if (curWord>0){
+      //     document
+      //       .getElementById("word" + curWord)
+      //       .classList.remove("currentWord");
+      //       curWord -= 1
+      //       curChar = ((allWords[curWord]).length)-3
+      //       // console.log("the word is ; ",allWords[curWord].length);
+      //       document
+      //         .getElementById("word" + curWord)
+      //         .classList.add("currentWord");
+
+      //         if (curWord>-1){
+
+      //       // console.log("not applicable");
+
+      //       delWord = document.getElementById("word"+(removableWord-1))
+      //       console.log("required element is ; ", delWord);
+      //       delWord.removeAttribute("display")
+      //       console.log("after remvoing att: ", document.getElementById("word"+(removableWord-1)));
+      //       removableWord -= 1
+      //     // console.log("current word was :",curWord+1, "and del word is : ", delWord);
+      //   }
+      // }
+      // else{console.log("already on the least position ");}
+      //   }
+
+      function checkBackspace(key) {
+        if (key == "Backspace") {
+          if (curChar > 0) {
+            overallChar -= 1;
+            curChar -= 1;
+            document
+              .getElementById("char" + overallChar)
+              .removeAttribute("class");
+          } else {
+            //do nothing
           }
         }
-
-        // when key did not match
-        else {
-          document.getElementById("char" + overallChar).classList.add("red");
-        }
-        curChar += 1;
-        overallChar += 1;
       }
 
       let timeCont = document.getElementById("timeCont");
@@ -174,20 +216,42 @@
         startTime();
         body.removeEventListener("keydown", firstKeyPress);
       }
+      // let word;
+      let wrongWord = 0;
+      function countMistypedWord(wordTyped) {
+        for (let i = 0; i < wordTyped; i++) {
+          if (
+            document.getElementById("word" + i).querySelector(".red") != null
+          ) {
+            wrongWord += 1;
+          }
+        }
+        return wrongWord;
+      }
 
       function startTime() {
         setInterval(() => {
           sec -= 1;
-          if (sec == 0) {
-            window.location.replace("/login");
+          if (sec == 40) {
+            let totalWords = curWord;
+            let totalChar = overallChar - 1;
+            let MTWords = countMistypedWord(curWord);
+            let MTChars = document.querySelectorAll(".red").length;
+
+            window.location.replace(
+              `/result?totalWords=${totalWords}&totalChar=${totalChar}&MTWords=${MTWords}&MTChars=${MTChars}`
+            );
           }
-          // if (sec == 0){clearInterval(setIntervalId)}
+
           timeCont.innerHTML = sec.toString();
         }, 1000);
       }
 
-      window.addEventListener("keydown", function (event) {
+      window.addEventListener("keypress", function (event) {
         matchKey(event.key);
+      });
+      window.addEventListener("keydown", function (event) {
+        checkBackspace(event.key);
       });
 
       window.onload = addELToBody();
