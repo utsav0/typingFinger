@@ -1,4 +1,4 @@
-#How to contribute to this project
+# How to contribute to this project
 
 So, to contribute to this project,firstly follow the steps in [README.md](README.md) file to install and test the project.
 
