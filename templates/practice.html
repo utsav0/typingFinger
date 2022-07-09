@@ -10,7 +10,6 @@
       .container {
         border: 2px solid red;
         width: 800px;
-        /* height: 70vh; */
         position: absolute;
         left: 50vw;
         top: 50%;
@@ -56,7 +55,6 @@
       }
       .currentWord {
         border: 2px solid purple;
-        /* padding-right: -5px; */
         border-radius: 10px;
       }
     </style>
@@ -181,15 +179,16 @@
       let body = document.getElementsByTagName("body")[0];
       let sec = 60;
 
+      // adding event listner to detect backspace
       function addELToBody() {
         body.addEventListener("keydown", firstKeyPress);
       }
 
+      // detecting when the key is pressed first time to start the timing
       function firstKeyPress() {
         startTime();
         body.removeEventListener("keydown", firstKeyPress);
       }
-      // let word;
       let wrongWord = 0;
       function countMistypedWord(wordTyped) {
         for (let i = 0; i < wordTyped; i++) {
@@ -202,6 +201,7 @@
         return wrongWord;
       }
 
+      // timing function
       function startTime() {
         setInterval(() => {
           sec -= 1;
@@ -211,6 +211,7 @@
             let MTWords = countMistypedWord(curWord);
             let MTChars = document.querySelectorAll(".red").length;
 
+            // redirecting when the time is over
             window.location.replace(
               `/result?totalWords=${totalWords}&totalChar=${totalChar}&MTWords=${MTWords}&MTChars=${MTChars}`
             );
@@ -220,6 +221,7 @@
         }, 1000);
       }
 
+      // adding event listner to detect the key pressed
       window.addEventListener("keypress", function (event) {
         matchKey(event.key);
       });
@@ -227,9 +229,10 @@
         checkBackspace(event.key);
       });
 
-      window.onload = addELToBody();
+      window.onload = addELToBody(); //adding additional event listner to body
 
       getWords();
+      // adding the current word class to first default word after the words are arrived from ajax
       setTimeout(() => {
         document.getElementById("word0").classList.add("currentWord");
       }, 200);
