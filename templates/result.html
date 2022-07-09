@@ -79,7 +79,7 @@ transform: translateX(-50%) translateY(-50%); */
 
       <div class="valueContainer">
         <h2 class="scoreHeading">
-          TOTAL WORDS: <span class="values">{{totalWords}}</span>
+          WORDS PER MINUTE: <span class="values">{{totalWords}}</span>
         </h2>
       </div>
       <div class="valueContainer">
@@ -94,7 +94,7 @@ transform: translateX(-50%) translateY(-50%); */
       </div>
       <div class="valueContainer">
         <h2 class="scoreHeading">
-          TOTAL CHARACTERS: <span class="values">{{totalChars}}</span>
+          CHARACTERS PER MINUTE: <span class="values">{{totalChars}}</span>
         </h2>
       </div>
       <div class="valueContainer">
@@ -109,5 +109,7 @@ transform: translateX(-50%) translateY(-50%); */
       </div>
     </div>
   </body>
-  <button id="retryBtn" onclick="location.href = '/practice'">RETRY</button>
+<form action="retryPractice" method="post">{% csrf_token %}
+  <button id="retryBtn" value="from result", name = "resultBtnStatus">RETRY</button>
+</form>
 </html>
