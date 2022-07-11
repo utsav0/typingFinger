@@ -5,9 +5,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from requests import request
 from urllib3 import Retry
-import os
-import csv
-import random
+import os, csv, random
 from decouple import config  # for the secret key
 dbUser = config("dbUser")
 dbPassword = config("dbPassword")

@@ -205,7 +205,7 @@
       function startTime() {
         setInterval(() => {
           sec -= 1;
-          if (sec == 40) {
+          if (sec == 0) {
             let totalWords = curWord;
             let totalChar = overallChar - 1;
             let MTWords = countMistypedWord(curWord);
